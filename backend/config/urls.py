@@ -9,6 +9,7 @@ api_v1 = [
     path("health/", include("apps.health.urls")),
     path("", include("apps.workspaces.urls")),
     path("", include("apps.knowledge.urls")),
+    path("", include("apps.documents.urls")),
 ]
 
 urlpatterns = [
