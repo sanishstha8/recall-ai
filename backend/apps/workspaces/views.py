@@ -17,6 +17,7 @@ from common.permissions import MANAGE, OWN, VIEW, member_workspace_ids, require_
 
 @extend_schema(tags=["workspaces"])
 class WorkspaceViewSet(viewsets.ModelViewSet):
+    queryset = Workspace.objects.none()  # for schema generation; see get_queryset
     serializer_class = WorkspaceSerializer
     http_method_names = ["get", "post", "patch", "delete"]
 

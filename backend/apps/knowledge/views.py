@@ -5,6 +5,7 @@ from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 
+from apps.knowledge.models import KnowledgeBase
 from apps.knowledge.selectors import scoped_knowledge_bases
 from apps.knowledge.serializers import KnowledgeBaseSerializer
 from common.permissions import CONTRIBUTE, MANAGE, VIEW, require_role
@@ -20,6 +21,7 @@ from common.permissions import CONTRIBUTE, MANAGE, VIEW, require_role
 )
 @extend_schema(tags=["knowledge-bases"])
 class KnowledgeBaseViewSet(viewsets.ModelViewSet):
+    queryset = KnowledgeBase.objects.none()  # for schema generation; see get_queryset
     serializer_class = KnowledgeBaseSerializer
     http_method_names = ["get", "post", "patch", "delete"]
 

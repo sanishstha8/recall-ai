@@ -14,5 +14,10 @@ extend-exclude = ["*/migrations/*"]
 select = ["E", "F", "W", "I", "B", "UP", "DJ", "SIM", "RUF"]
 ignore = ["RUF012", "B904", "SIM105", "SIM108"]
 
+[tool.ruff.lint.per-file-ignores]
+# Prompt text reads better unwrapped.
+"apps/ai/rag/prompt_builder.py" = ["E501"]
+"apps/study/prompts.py" = ["E501"]
+
 [tool.ruff.lint.isort]
 known-first-party = ["apps", "common", "config", "tests"]

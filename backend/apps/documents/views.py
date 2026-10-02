@@ -12,7 +12,7 @@ from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.response import Response
 
 from apps.documents import services
-from apps.documents.models import DocumentStatus
+from apps.documents.models import Document, DocumentStatus
 from apps.documents.selectors import get_document_for, scoped_documents
 from apps.documents.serializers import (
     DocumentPageSerializer,
@@ -81,6 +81,7 @@ class KnowledgeBaseDocumentsView(generics.ListCreateAPIView):
 class DocumentViewSet(
     mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet
 ):
+    queryset = Document.objects.none()  # for schema generation; see get_queryset
     serializer_class = DocumentSerializer
 
     def get_queryset(self):
