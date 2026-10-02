@@ -214,3 +214,15 @@ class BrokenLLM:
     def stream(self, *args, **kwargs):
         self._raise()
         yield  # pragma: no cover
+
+
+def test_unrelated_short_question_does_not_inherit_previous_query(conversation, user):
+    from apps.ai.providers import ChatMessage
+    from apps.ai.services import ChatService
+
+    service = ChatService(conversation, user)
+    history = [ChatMessage("user", "Explain third normal form"), ChatMessage("assistant", "...")]
+    assert (
+        service.retrieval_query("What is the capital of France?", history) == "What is the capital of France?"
+    )
+    assert service.retrieval_query("Give an example", history) == "Explain third normal form\nGive an example"

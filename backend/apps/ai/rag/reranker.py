@@ -15,7 +15,7 @@ _STOPWORDS = frozenset(
     """
     a an and are as at be by can do does explain for from give how i in is it me of on or
     please tell that the their them this to was what when where which who why with you your
-    """.split()  # noqa: SIM905
+    """.split()
 )
 
 

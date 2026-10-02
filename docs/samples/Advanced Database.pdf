@@ -1,0 +1,186 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R 9 0 R 11 0 R 13 0 R 15 0 R] /Count 6 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Length 1003 >>
+stream
+BT
+/F1 11 Tf
+14 TL
+50 790 Td
+(Advanced Database Systems - Lecture Notes) Tj T*
+(Unit 3: Normalization) Tj T*
+() Tj T*
+(Normalization is the process of organizing the attributes and relations of a relational) Tj T*
+(database to reduce data redundancy and improve data integrity. A poorly designed relation) Tj T*
+(suffers from update anomalies: an insertion anomaly occurs when we cannot record a fact) Tj T*
+(without also recording an unrelated fact, a deletion anomaly occurs when deleting one fact) Tj T*
+(unintentionally removes another, and a modification anomaly occurs when the same fact is) Tj T*
+(stored in many rows and must be updated everywhere.) Tj T*
+() Tj T*
+(Normalization works by decomposing relations into smaller relations based on functional) Tj T*
+(dependencies. A functional dependency X -> Y holds when each value of X determines exactly) Tj T*
+(one value of Y. The normal forms 1NF, 2NF, 3NF and BCNF are progressively stricter) Tj T*
+(conditions on these dependencies.) Tj T*
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 4 0 R >>
+endobj
+6 0 obj
+<< /Length 701 >>
+stream
+BT
+/F1 11 Tf
+14 TL
+50 790 Td
+(First Normal Form \(1NF\)) Tj T*
+() Tj T*
+(A relation is in first normal form when every attribute contains only atomic \(indivisible\)) Tj T*
+(values and there are no repeating groups. Each row must be identifiable by a primary key.) Tj T*
+() Tj T*
+(Example: a table STUDENT\(StudentID, Name, Courses\) where Courses holds the list "DBMS,) Tj T*
+(Networks, AI" violates 1NF because the Courses attribute is multi-valued. To convert it to) Tj T*
+(1NF we create one row per student and course: ENROLLMENT\(StudentID, Name, Course\) with rows) Tj T*
+(\(101, Asha, DBMS\), \(101, Asha, Networks\) and \(101, Asha, AI\). Now every attribute value is) Tj T*
+(atomic.) Tj T*
+ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 6 0 R >>
+endobj
+8 0 obj
+<< /Length 834 >>
+stream
+BT
+/F1 11 Tf
+14 TL
+50 790 Td
+(Second Normal Form \(2NF\)) Tj T*
+() Tj T*
+(A relation is in second normal form when it is in 1NF and every non-key attribute is fully) Tj T*
+(functionally dependent on the whole primary key. 2NF only matters when the primary key is) Tj T*
+(composite. A partial dependency exists when a non-key attribute depends on only part of a) Tj T*
+(composite key.) Tj T*
+() Tj T*
+(Example: ENROLLMENT\(StudentID, CourseID, StudentName, CourseTitle, Grade\) has the composite) Tj T*
+(key \(StudentID, CourseID\). StudentName depends only on StudentID and CourseTitle depends) Tj T*
+(only on CourseID, which are partial dependencies. Decompose into STUDENT\(StudentID,) Tj T*
+(StudentName\), COURSE\(CourseID, CourseTitle\) and ENROLLMENT\(StudentID, CourseID, Grade\). Each) Tj T*
+(relation is now in 2NF.) Tj T*
+ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 8 0 R >>
+endobj
+10 0 obj
+<< /Length 892 >>
+stream
+BT
+/F1 11 Tf
+14 TL
+50 790 Td
+(Third Normal Form \(3NF\)) Tj T*
+() Tj T*
+(A relation is in third normal form when it is in 2NF and no non-key attribute is) Tj T*
+(transitively dependent on the primary key. A transitive dependency exists when a non-key) Tj T*
+(attribute depends on another non-key attribute, for example A -> B and B -> C, so A -> C.) Tj T*
+() Tj T*
+(Example: EMPLOYEE\(EmpID, EmpName, DeptID, DeptName\). EmpID -> DeptID and DeptID -> DeptName,) Tj T*
+(so DeptName is transitively dependent on EmpID. Decompose into EMPLOYEE\(EmpID, EmpName,) Tj T*
+(DeptID\) and DEPARTMENT\(DeptID, DeptName\). Changing a department name now requires updating a) Tj T*
+(single row, which removes the modification anomaly.) Tj T*
+() Tj T*
+(Boyce-Codd Normal Form \(BCNF\) is a stronger version of 3NF: for every non-trivial functional) Tj T*
+(dependency X -> Y, X must be a superkey.) Tj T*
+ET
+endstream
+endobj
+11 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 10 0 R >>
+endobj
+12 0 obj
+<< /Length 972 >>
+stream
+BT
+/F1 11 Tf
+14 TL
+50 790 Td
+(Unit 4: Transactions and Concurrency Control) Tj T*
+() Tj T*
+(A transaction is a logical unit of work that must satisfy the ACID properties. Atomicity) Tj T*
+(means all operations of a transaction complete or none do. Consistency means a transaction) Tj T*
+(moves the database from one valid state to another. Isolation means concurrent transactions) Tj T*
+(do not interfere with each other. Durability means committed changes survive system) Tj T*
+(failures, typically by writing to a write-ahead log.) Tj T*
+() Tj T*
+(Concurrency control prevents problems such as lost updates, dirty reads and unrepeatable) Tj T*
+(reads. Two-phase locking \(2PL\) guarantees conflict serializability: in the growing phase a) Tj T*
+(transaction acquires locks and releases none, and in the shrinking phase it releases locks) Tj T*
+(and acquires none. Strict 2PL holds all exclusive locks until commit, which also prevents) Tj T*
+(cascading aborts.) Tj T*
+ET
+endstream
+endobj
+13 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 12 0 R >>
+endobj
+14 0 obj
+<< /Length 844 >>
+stream
+BT
+/F1 11 Tf
+14 TL
+50 790 Td
+(Unit 5: Indexing) Tj T*
+() Tj T*
+(An index is an auxiliary structure that speeds up data retrieval at the cost of extra) Tj T*
+(storage and slower writes. A B+ tree index keeps keys sorted in a balanced tree whose leaves) Tj T*
+(are linked, so it supports both equality lookups and range queries efficiently in O\(log n\)) Tj T*
+(time. A hash index maps keys to buckets with a hash function and is very fast for equality) Tj T*
+(searches but cannot answer range queries.) Tj T*
+() Tj T*
+(A clustered index determines the physical order of rows in the table, so a table can have) Tj T*
+(only one clustered index. A non-clustered \(secondary\) index stores pointers to rows and a) Tj T*
+(table may have many. Choosing indexes requires balancing query performance against insert) Tj T*
+(and update overhead.) Tj T*
+ET
+endstream
+endobj
+15 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 14 0 R >>
+endobj
+xref
+0 16
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000154 00000 n 
+0000000224 00000 n 
+0000001279 00000 n 
+0000001405 00000 n 
+0000002157 00000 n 
+0000002283 00000 n 
+0000003168 00000 n 
+0000003294 00000 n 
+0000004238 00000 n 
+0000004366 00000 n 
+0000005390 00000 n 
+0000005518 00000 n 
+0000006414 00000 n 
+trailer
+<< /Size 16 /Root 1 0 R >>
+startxref
+6542
+%%EOF

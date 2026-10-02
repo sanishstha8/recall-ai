@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import re
 import time
 from collections.abc import Iterator
 from typing import Any
@@ -24,6 +25,33 @@ logger = logging.getLogger(__name__)
 
 MAX_QUESTION_CHARS = 8000
 SHORT_FOLLOW_UP_WORDS = 8
+FOLLOW_UP_MARKERS = frozenset(
+    [
+        "it",
+        "its",
+        "this",
+        "that",
+        "these",
+        "those",
+        "them",
+        "they",
+        "he",
+        "she",
+        "example",
+        "examples",
+        "more",
+        "elaborate",
+        "further",
+        "why",
+        "how",
+        "else",
+        "another",
+        "again",
+        "also",
+        "previous",
+        "above",
+    ]
+)
 
 
 def make_title(text: str, limit: int = 60) -> str:
@@ -74,8 +102,10 @@ class ChatService:
         ]
 
     def retrieval_query(self, question: str, history: list[ChatMessage]) -> str:
-        # Short follow-ups ("give an example") need the previous question to retrieve well.
-        if len(question.split()) < SHORT_FOLLOW_UP_WORDS:
+        # Short follow-ups that refer back ("give an example", "why is that?") need the
+        # previous question to retrieve well; unrelated short questions must not inherit it.
+        words = set(re.findall(r"[a-z]+", question.lower()))
+        if len(question.split()) < SHORT_FOLLOW_UP_WORDS and words & FOLLOW_UP_MARKERS:
             previous = next((m.content for m in reversed(history) if m.role == "user"), None)
             if previous:
                 return f"{previous}\n{question}"
