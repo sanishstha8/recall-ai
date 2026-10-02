@@ -185,6 +185,8 @@ SPECTACULAR_SETTINGS = {
     "ENUM_NAME_OVERRIDES": {
         "WorkspaceRoleEnum": "apps.workspaces.models.Role",
         "MessageRoleEnum": "apps.conversations.models.MessageRole",
+        "DocumentStatusEnum": "apps.documents.models.DocumentStatus",
+        "StudySetStatusEnum": "apps.study.models.StudySetStatus",
     },
 }
 

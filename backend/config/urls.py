@@ -12,6 +12,8 @@ api_v1 = [
     path("", include("apps.documents.urls")),
     path("", include("apps.ai.urls")),
     path("", include("apps.conversations.urls")),
+    path("", include("apps.study.urls")),
+    path("", include("apps.usage.urls")),
 ]
 
 urlpatterns = [

@@ -12,7 +12,7 @@ from rest_framework.views import APIView
 from apps.ai.providers import get_llm_provider
 
 
-def _check(fn) -> dict:
+def run_check(fn) -> dict:
     started = time.perf_counter()
     try:
         detail = fn()
@@ -22,7 +22,7 @@ def _check(fn) -> dict:
     return {"ok": ok, "latency_ms": round((time.perf_counter() - started) * 1000, 1), "detail": detail}
 
 
-def _database() -> str:
+def check_database() -> str:
     with connection.cursor() as cursor:
         cursor.execute("SELECT extversion FROM pg_extension WHERE extname = 'vector'")
         row = cursor.fetchone()
@@ -31,7 +31,7 @@ def _database() -> str:
     return f"pgvector {row[0]}"
 
 
-def _broker() -> str:
+def check_broker() -> str:
     if settings.CELERY_TASK_ALWAYS_EAGER:
         return "eager mode (tasks run inline)"
     import redis
@@ -40,7 +40,7 @@ def _broker() -> str:
     return "redis reachable"
 
 
-def _ai() -> dict:
+def check_ai() -> dict:
     return get_llm_provider().health()
 
 
@@ -65,7 +65,11 @@ class ReadinessView(APIView):
 
     @extend_schema(tags=["health"], responses={200: dict, 503: dict})
     def get(self, request):
-        checks = {"database": _check(_database), "broker": _check(_broker), "ai": _check(_ai)}
+        checks = {
+            "database": run_check(check_database),
+            "broker": run_check(check_broker),
+            "ai": run_check(check_ai),
+        }
         ready = all(c["ok"] for c in checks.values())
         return Response(
             {"status": "ready" if ready else "degraded", "checks": checks},
