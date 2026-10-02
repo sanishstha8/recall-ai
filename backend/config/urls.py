@@ -10,6 +10,8 @@ api_v1 = [
     path("", include("apps.workspaces.urls")),
     path("", include("apps.knowledge.urls")),
     path("", include("apps.documents.urls")),
+    path("", include("apps.ai.urls")),
+    path("", include("apps.conversations.urls")),
 ]
 
 urlpatterns = [

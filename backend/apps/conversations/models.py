@@ -66,6 +66,9 @@ class Citation(models.Model):
     page_number = models.PositiveIntegerField()
     quoted_content = models.TextField()
     relevance_score = models.FloatField()
+    # True when the answer explicitly referenced this source with its [n] marker;
+    # False for retrieved context the model consulted but did not cite.
+    cited = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
