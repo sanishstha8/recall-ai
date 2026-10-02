@@ -81,3 +81,25 @@ def anon_client():
 @pytest.fixture
 def llm():
     return ScriptedLLMProvider
+
+
+@pytest.fixture
+def make_document(django_capture_on_commit_callbacks):
+    """Upload and synchronously process a PDF built from ``pages`` (real pipeline, fake embedder)."""
+    from django.core.files.uploadedfile import SimpleUploadedFile
+
+    from apps.documents.services import upload_document
+    from tests.pdf_factory import build_pdf
+
+    def _make(kb, pages: list[str], name: str = "Advanced Database.pdf", user=None):
+        with django_capture_on_commit_callbacks(execute=True):
+            document = upload_document(
+                knowledge_base=kb,
+                user=user or kb.workspace.owner,
+                file=SimpleUploadedFile(name, build_pdf(pages)),
+            )
+        document.refresh_from_db()
+        assert document.status == "READY", document.processing_error
+        return document
+
+    return _make

@@ -17,3 +17,5 @@ REST_FRAMEWORK = {
 AI_LLM_PROVIDER = "tests.fakes.ScriptedLLMProvider"
 AI_EMBEDDING_PROVIDER = "tests.fakes.HashingEmbeddingProvider"
 LOGGING = {"version": 1, "disable_existing_loggers": False, "root": {"level": "WARNING"}}
+# The hashing test embedder yields lower cosine scores than real embedding models.
+RAG_MIN_SCORE = 0.05

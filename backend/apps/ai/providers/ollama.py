@@ -32,9 +32,18 @@ def _model_matches(wanted: str, available: str) -> bool:
 
 
 class OllamaClient:
-    def __init__(self, base_url: str | None = None, timeout: float | None = None):
+    def __init__(
+        self,
+        base_url: str | None = None,
+        timeout: float | None = None,
+        transport: httpx.BaseTransport | None = None,
+    ):
         self.base_url = (base_url or settings.OLLAMA_BASE_URL).rstrip("/")
-        self.timeout = httpx.Timeout(timeout or settings.OLLAMA_REQUEST_TIMEOUT, connect=5.0)
+        self.http = httpx.Client(
+            base_url=self.base_url,
+            timeout=httpx.Timeout(timeout or settings.OLLAMA_REQUEST_TIMEOUT, connect=5.0),
+            transport=transport,
+        )
 
     def _error(self, response: httpx.Response, model: str) -> AIProviderError:
         try:
@@ -52,7 +61,7 @@ class OllamaClient:
 
     def post(self, path: str, payload: dict, *, model: str) -> dict:
         try:
-            response = httpx.post(f"{self.base_url}{path}", json=payload, timeout=self.timeout)
+            response = self.http.post(path, json=payload)
         except httpx.TimeoutException as exc:
             raise AIProviderError("The local model timed out.", retryable=True) from exc
         except httpx.HTTPError as exc:
@@ -63,9 +72,7 @@ class OllamaClient:
 
     def stream(self, path: str, payload: dict, *, model: str) -> Iterator[dict]:
         try:
-            with httpx.stream(
-                "POST", f"{self.base_url}{path}", json=payload, timeout=self.timeout
-            ) as response:
+            with self.http.stream("POST", path, json=payload) as response:
                 if response.status_code != 200:
                     response.read()
                     raise self._error(response, model)
@@ -83,7 +90,7 @@ class OllamaClient:
 
     def list_models(self) -> list[str]:
         try:
-            response = httpx.get(f"{self.base_url}/api/tags", timeout=5.0)
+            response = self.http.get("/api/tags", timeout=5.0)
             response.raise_for_status()
         except httpx.HTTPError as exc:
             raise AIProviderUnavailable(f"Cannot reach Ollama at {self.base_url}.") from exc
