@@ -1,0 +1,21 @@
+// Central query-key factory so invalidation after mutations stays consistent.
+export const qk = {
+  me: ["me"] as const,
+  workspaces: ["workspaces"] as const,
+  members: (workspaceId: number) => ["workspaces", workspaceId, "members"] as const,
+  knowledgeBases: (workspaceId?: number) => ["knowledge-bases", { workspaceId }] as const,
+  knowledgeBase: (id: number) => ["knowledge-base", id] as const,
+  documents: (kbId: number) => ["documents", "kb", kbId] as const,
+  recentDocuments: (workspaceId?: number) => ["documents", "recent", { workspaceId }] as const,
+  document: (id: number) => ["document", id] as const,
+  documentPage: (id: number, page: number) => ["document", id, "page", page] as const,
+  conversations: (workspaceId?: number) => ["conversations", { workspaceId }] as const,
+  conversation: (id: number) => ["conversation", id] as const,
+  messages: (id: number) => ["conversation", id, "messages"] as const,
+  studySets: (workspaceId?: number, kind?: string) => ["study-sets", { workspaceId, kind }] as const,
+  studySet: (id: number) => ["study-set", id] as const,
+  attempts: (id: number) => ["study-set", id, "attempts"] as const,
+  usage: (params: object) => ["usage", params] as const,
+  readiness: ["readiness"] as const,
+  admin: ["admin-analytics"] as const,
+};
