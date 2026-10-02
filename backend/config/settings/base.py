@@ -182,6 +182,10 @@ SPECTACULAR_SETTINGS = {
     "SERVE_INCLUDE_SCHEMA": False,
     "COMPONENT_SPLIT_REQUEST": True,
     "SCHEMA_PATH_PREFIX": r"/api/v1",
+    "ENUM_NAME_OVERRIDES": {
+        "WorkspaceRoleEnum": "apps.workspaces.models.Role",
+        "MessageRoleEnum": "apps.conversations.models.MessageRole",
+    },
 }
 
 # --- CORS / CSRF ---------------------------------------------------------------
@@ -264,3 +268,7 @@ LOGGING = {
         "httpcore": {"level": "WARNING"},
     },
 }
+
+# "vector" (pgvector cosine) or "hybrid" (vector + Postgres full-text, fused with RRF).
+RAG_RETRIEVER = env("RAG_RETRIEVER", default="vector")
+RAG_CONTEXT_TOKENS = env.int("RAG_CONTEXT_TOKENS", default=3000)
