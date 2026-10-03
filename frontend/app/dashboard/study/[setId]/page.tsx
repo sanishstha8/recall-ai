@@ -124,7 +124,7 @@ export default function StudySetPage() {
           <h1 className="text-2xl font-semibold tracking-tight">{s.title}</h1>
           {s.sources.length > 0 && (
             <p className="flex flex-wrap items-center gap-x-2 text-xs text-muted-foreground">
-              <FileText className="size-3.5" /> Based on
+              <FileText className="size-3.5" /> Based on{" "}
               {[...new Set(s.sources.map((src) => src.document_name))].join(", ")} · {s.sources.length}{" "}
               {s.sources.length === 1 ? "page" : "pages"}
             </p>
