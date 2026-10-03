@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib.auth import authenticate
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
-from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.exceptions import AuthenticationFailed, PermissionDenied
 from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -70,7 +70,14 @@ def _auth_response(request, user, status_code=status.HTTP_200_OK) -> Response:
 
 
 def _refresh_token_from(request) -> str | None:
-    return request.data.get("refresh") or request.COOKIES.get(settings.REFRESH_COOKIE_NAME)
+    if body_token := request.data.get("refresh"):
+        return body_token
+    token = request.COOKIES.get(settings.REFRESH_COOKIE_NAME)
+    origin = request.headers.get("Origin")
+    # Defence in depth on top of SameSite: a cookie may only be used from an allowed origin.
+    if token and origin and origin not in settings.CORS_ALLOWED_ORIGINS:
+        raise PermissionDenied("Origin not allowed.")
+    return token
 
 
 class RegisterView(PublicAuthView):

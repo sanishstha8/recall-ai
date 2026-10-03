@@ -138,3 +138,11 @@ def test_password_reset_unknown_email_does_not_leak(anon_client):
     res = anon_client.post("/api/v1/auth/password-reset/", {"email": "nobody@example.com"})
     assert res.status_code == 202
     assert len(mail.outbox) == 0
+
+
+def test_refresh_cookie_rejected_from_foreign_origin(anon_client, user):
+    anon_client.post("/api/v1/auth/login/", {"email": user.email, "password": PASSWORD})
+    res = anon_client.post("/api/v1/auth/refresh/", HTTP_ORIGIN="https://evil.example")
+    assert res.status_code == 403
+    ok = anon_client.post("/api/v1/auth/refresh/", HTTP_ORIGIN="http://localhost:3000")
+    assert ok.status_code == 200
