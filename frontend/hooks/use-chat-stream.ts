@@ -52,7 +52,11 @@ export function useChatStream(conversationId: number) {
       setState({ ...IDLE, status: "streaming", pendingQuestion: body.content ?? null });
 
       try {
-        for await (const { event, data } of streamSSE(`/conversations/${conversationId}/stream/`, body, controller.signal)) {
+        for await (const { event, data } of streamSSE(
+          `/conversations/${conversationId}/stream/`,
+          body,
+          controller.signal,
+        )) {
           if (event === "start") {
             const { user_message } = data as { user_message: Message };
             if (!body.regenerate) queryClient.setQueryData<Message[]>(key, (old = []) => [...old, user_message]);

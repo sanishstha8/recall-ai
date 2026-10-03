@@ -28,14 +28,30 @@ import { cn } from "@/lib/utils";
 import { formatBytes, formatNumber, timeAgo } from "@/lib/utils/format";
 import { useWorkspace } from "@/stores/workspace-store";
 
-function StatCard({ label, value, icon: Icon, href, hint }: { label: string; value?: number; icon: typeof FileText; href: string; hint?: string }) {
+function StatCard({
+  label,
+  value,
+  icon: Icon,
+  href,
+  hint,
+}: {
+  label: string;
+  value?: number;
+  icon: typeof FileText;
+  href: string;
+  hint?: string;
+}) {
   return (
     <Link href={href} className="group">
       <Card className="gap-3 py-5 transition-colors group-hover:border-foreground/20">
         <CardContent className="flex items-start justify-between px-5">
           <div className="space-y-1.5">
             <p className="text-sm text-muted-foreground">{label}</p>
-            {value === undefined ? <Skeleton className="h-8 w-14" /> : <p className="text-3xl font-semibold tracking-tight tabular-nums">{formatNumber(value)}</p>}
+            {value === undefined ? (
+              <Skeleton className="h-8 w-14" />
+            ) : (
+              <p className="text-3xl font-semibold tracking-tight tabular-nums">{formatNumber(value)}</p>
+            )}
             {hint && <p className="text-xs text-muted-foreground">{hint}</p>}
           </div>
           <div className="rounded-lg bg-muted p-2 text-muted-foreground transition-colors group-hover:bg-brand-soft group-hover:text-brand">
@@ -47,9 +63,22 @@ function StatCard({ label, value, icon: Icon, href, hint }: { label: string; val
   );
 }
 
-function QuickAction({ href, icon: Icon, title, description }: { href: string; icon: typeof Upload; title: string; description: string }) {
+function QuickAction({
+  href,
+  icon: Icon,
+  title,
+  description,
+}: {
+  href: string;
+  icon: typeof Upload;
+  title: string;
+  description: string;
+}) {
   return (
-    <Link href={href} className="group flex items-start gap-3 rounded-xl border bg-card p-4 transition-colors hover:border-foreground/20">
+    <Link
+      href={href}
+      className="group flex items-start gap-3 rounded-xl border bg-card p-4 transition-colors hover:border-foreground/20"
+    >
       <div className="rounded-lg bg-brand-soft p-2 text-brand">
         <Icon className="size-4" />
       </div>
@@ -125,7 +154,11 @@ export default function DashboardPage() {
 
   return (
     <div className="mx-auto max-w-6xl space-y-8 p-4 md:p-8">
-      <PageHeader eyebrow={current!.name} title={`${greeting}, ${user?.first_name || user?.full_name}`} description="Here's what's happening in your knowledge workspace." />
+      <PageHeader
+        eyebrow={current!.name}
+        title={`${greeting}, ${user?.first_name || user?.full_name}`}
+        description="Here's what's happening in your knowledge workspace."
+      />
       <Suspense>
         <Welcome />
       </Suspense>
@@ -144,10 +177,30 @@ export default function DashboardPage() {
       </section>
 
       <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4" aria-label="Quick actions">
-        <QuickAction href="/dashboard/knowledge" icon={Upload} title="Upload document" description="PDF, DOCX, TXT or Markdown" />
-        <QuickAction href="/dashboard/knowledge?new=1" icon={Library} title="New knowledge base" description="Group related documents" />
-        <QuickAction href="/dashboard/chat" icon={MessageSquarePlus} title="Start chat" description="Ask with cited answers" />
-        <QuickAction href="/dashboard/study" icon={GraduationCap} title="Study" description="Quizzes, flashcards, exams" />
+        <QuickAction
+          href="/dashboard/knowledge"
+          icon={Upload}
+          title="Upload document"
+          description="PDF, DOCX, TXT or Markdown"
+        />
+        <QuickAction
+          href="/dashboard/knowledge?new=1"
+          icon={Library}
+          title="New knowledge base"
+          description="Group related documents"
+        />
+        <QuickAction
+          href="/dashboard/chat"
+          icon={MessageSquarePlus}
+          title="Start chat"
+          description="Ask with cited answers"
+        />
+        <QuickAction
+          href="/dashboard/study"
+          icon={GraduationCap}
+          title="Study"
+          description="Quizzes, flashcards, exams"
+        />
       </section>
 
       <div className="grid gap-6 lg:grid-cols-[1fr_1fr_20rem]">
@@ -155,12 +208,20 @@ export default function DashboardPage() {
           {docs.isPending ? (
             <RowSkeletons />
           ) : !docs.data?.results.length ? (
-            <EmptyState className="m-5 border-0 py-8" icon={FileText} title="No documents yet" description="Upload a PDF to a knowledge base to get started." />
+            <EmptyState
+              className="m-5 border-0 py-8"
+              icon={FileText}
+              title="No documents yet"
+              description="Upload a PDF to a knowledge base to get started."
+            />
           ) : (
             <ul className="divide-y">
               {docs.data.results.map((doc) => (
                 <li key={doc.id}>
-                  <Link href={`/dashboard/documents/${doc.id}`} className="flex items-center gap-3 px-5 py-3 hover:bg-muted/40">
+                  <Link
+                    href={`/dashboard/documents/${doc.id}`}
+                    className="flex items-center gap-3 px-5 py-3 hover:bg-muted/40"
+                  >
                     <FileText className="size-4 shrink-0 text-muted-foreground" />
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-medium">{doc.name}</p>
@@ -180,7 +241,12 @@ export default function DashboardPage() {
           {chats.isPending ? (
             <RowSkeletons />
           ) : !chats.data?.results.length ? (
-            <EmptyState className="m-5 border-0 py-8" icon={MessagesSquare} title="No conversations yet" description="Ask your documents a question." />
+            <EmptyState
+              className="m-5 border-0 py-8"
+              icon={MessagesSquare}
+              title="No conversations yet"
+              description="Ask your documents a question."
+            />
           ) : (
             <ul className="divide-y">
               {chats.data.results.slice(0, 6).map((c) => (

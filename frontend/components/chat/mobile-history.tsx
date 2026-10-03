@@ -11,7 +11,13 @@ export function MobileHistoryButton() {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Button variant="ghost" size="icon-sm" className="lg:hidden" aria-label="Chat history" onClick={() => setOpen(true)}>
+      <Button
+        variant="ghost"
+        size="icon-sm"
+        className="lg:hidden"
+        aria-label="Chat history"
+        onClick={() => setOpen(true)}
+      >
         <History />
       </Button>
       <Sheet open={open} onOpenChange={setOpen}>

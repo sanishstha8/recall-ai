@@ -47,10 +47,29 @@ export default function RegisterPage() {
       <form onSubmit={onSubmit} noValidate className="space-y-4">
         <FormError message={formError} />
         <div className="grid grid-cols-2 gap-3">
-          <TextField id="first_name" label="First name" autoComplete="given-name" error={errors.first_name?.message} {...register("first_name")} />
-          <TextField id="last_name" label="Last name" autoComplete="family-name" error={errors.last_name?.message} {...register("last_name")} />
+          <TextField
+            id="first_name"
+            label="First name"
+            autoComplete="given-name"
+            error={errors.first_name?.message}
+            {...register("first_name")}
+          />
+          <TextField
+            id="last_name"
+            label="Last name"
+            autoComplete="family-name"
+            error={errors.last_name?.message}
+            {...register("last_name")}
+          />
         </div>
-        <TextField id="email" label="Email" type="email" autoComplete="email" error={errors.email?.message} {...register("email")} />
+        <TextField
+          id="email"
+          label="Email"
+          type="email"
+          autoComplete="email"
+          error={errors.email?.message}
+          {...register("email")}
+        />
         <TextField
           id="password"
           label="Password"
@@ -60,7 +79,14 @@ export default function RegisterPage() {
           error={errors.password?.message}
           {...register("password")}
         />
-        <TextField id="confirm" label="Confirm password" type="password" autoComplete="new-password" error={errors.confirm?.message} {...register("confirm")} />
+        <TextField
+          id="confirm"
+          label="Confirm password"
+          type="password"
+          autoComplete="new-password"
+          error={errors.confirm?.message}
+          {...register("confirm")}
+        />
         <Button type="submit" className="h-9 w-full" disabled={isSubmitting}>
           {isSubmitting && <Loader2 className="animate-spin" />}
           Create account

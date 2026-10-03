@@ -55,8 +55,22 @@ function ResetForm() {
   return (
     <form onSubmit={onSubmit} noValidate className="space-y-4">
       <FormError message={formError} />
-      <TextField id="new_password" label="New password" type="password" autoComplete="new-password" error={errors.new_password?.message} {...register("new_password")} />
-      <TextField id="confirm" label="Confirm password" type="password" autoComplete="new-password" error={errors.confirm?.message} {...register("confirm")} />
+      <TextField
+        id="new_password"
+        label="New password"
+        type="password"
+        autoComplete="new-password"
+        error={errors.new_password?.message}
+        {...register("new_password")}
+      />
+      <TextField
+        id="confirm"
+        label="Confirm password"
+        type="password"
+        autoComplete="new-password"
+        error={errors.confirm?.message}
+        {...register("confirm")}
+      />
       <Button type="submit" className="h-9 w-full" disabled={isSubmitting}>
         {isSubmitting && <Loader2 className="animate-spin" />}
         Update password

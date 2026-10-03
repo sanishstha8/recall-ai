@@ -7,7 +7,12 @@ import { useState } from "react";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { DocumentStatusBadge } from "@/components/documents/status-badge";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useDeleteDocument, useReprocessDocument } from "@/hooks/use-documents";
 import { formatBytes, formatDate } from "@/lib/utils/format";
@@ -39,13 +44,20 @@ export function DocumentTable({ documents, canEdit }: { documents: DocumentItem[
               data-testid="document-row"
               className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1 px-4 py-3 md:grid-cols-[minmax(0,1fr)_5rem_5rem_4.5rem_8rem_7rem_2.5rem]"
             >
-              <Link href={`/dashboard/documents/${doc.id}`} className="flex min-w-0 items-center gap-2.5 hover:underline">
+              <Link
+                href={`/dashboard/documents/${doc.id}`}
+                className="flex min-w-0 items-center gap-2.5 hover:underline"
+              >
                 <FileText className="size-4 shrink-0 text-muted-foreground" />
                 <span className="truncate text-sm font-medium">{doc.name}</span>
               </Link>
               <span className="hidden text-sm text-muted-foreground md:block">{TYPE_LABEL[doc.file_type]}</span>
-              <span className="hidden text-sm text-muted-foreground tabular-nums md:block">{formatBytes(doc.file_size)}</span>
-              <span className="hidden text-sm text-muted-foreground tabular-nums md:block">{doc.page_count || "—"}</span>
+              <span className="hidden text-sm text-muted-foreground tabular-nums md:block">
+                {formatBytes(doc.file_size)}
+              </span>
+              <span className="hidden text-sm text-muted-foreground tabular-nums md:block">
+                {doc.page_count || "—"}
+              </span>
               <span className="row-start-2 flex items-center gap-1.5 md:row-start-auto">
                 {doc.status === "FAILED" && doc.processing_error ? (
                   <Tooltip>
@@ -60,12 +72,19 @@ export function DocumentTable({ documents, canEdit }: { documents: DocumentItem[
                   <DocumentStatusBadge doc={doc} />
                 )}
                 {doc.status === "FAILED" && canEdit && (
-                  <Button variant="ghost" size="xs" onClick={() => reprocess.mutate(doc)} disabled={reprocess.isPending}>
+                  <Button
+                    variant="ghost"
+                    size="xs"
+                    onClick={() => reprocess.mutate(doc)}
+                    disabled={reprocess.isPending}
+                  >
                     <RotateCw /> Retry
                   </Button>
                 )}
               </span>
-              <span className="row-start-2 text-xs text-muted-foreground md:row-start-auto md:text-sm">{formatDate(doc.created_at)}</span>
+              <span className="row-start-2 text-xs text-muted-foreground md:row-start-auto md:text-sm">
+                {formatDate(doc.created_at)}
+              </span>
               <div className="col-start-2 row-span-2 row-start-1 flex justify-end md:col-start-auto md:row-span-1 md:row-start-auto">
                 {canEdit && (
                   <DropdownMenu>

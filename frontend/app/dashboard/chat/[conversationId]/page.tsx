@@ -57,7 +57,14 @@ function Thread() {
   const lastAssistantId = [...list].reverse().find((m) => m.role === "ASSISTANT")?.id;
 
   if (conversation.error) {
-    return <ErrorState className="m-8" title="Conversation unavailable" error={conversation.error} onRetry={() => conversation.refetch()} />;
+    return (
+      <ErrorState
+        className="m-8"
+        title="Conversation unavailable"
+        error={conversation.error}
+        onRetry={() => conversation.refetch()}
+      />
+    );
   }
 
   return (
@@ -107,10 +114,19 @@ function Thread() {
           )}
 
           {state.pendingQuestion && <UserMessage content={state.pendingQuestion} />}
-          {streaming && <AssistantMessage content={state.draft} sources={streamSourcesToSources(state.sources, state.draft)} streaming />}
+          {streaming && (
+            <AssistantMessage
+              content={state.draft}
+              sources={streamSourcesToSources(state.sources, state.draft)}
+              streaming
+            />
+          )}
 
           {state.status === "error" && (
-            <div role="alert" className="flex items-start gap-3 rounded-xl border border-destructive/30 bg-destructive/5 p-4 text-sm">
+            <div
+              role="alert"
+              className="flex items-start gap-3 rounded-xl border border-destructive/30 bg-destructive/5 p-4 text-sm"
+            >
               <AlertTriangle className="mt-0.5 size-4 shrink-0 text-destructive" />
               <div className="flex-1">
                 <p className="font-medium">The answer couldn&apos;t be generated</p>

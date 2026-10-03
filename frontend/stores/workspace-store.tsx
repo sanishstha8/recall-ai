@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
 
 import { workspaceApi } from "@/lib/api/endpoints";
 import { qk } from "@/lib/api/query-keys";
@@ -23,6 +23,7 @@ type WorkspaceContextValue = {
 const WorkspaceContext = createContext<WorkspaceContextValue | null>(null);
 
 function readStoredId(): number | null {
+  if (typeof window === "undefined") return null;
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     return raw ? Number(raw) : null;
@@ -35,11 +36,8 @@ function readStoredId(): number | null {
 export function WorkspaceProvider({ children }: { children: ReactNode }) {
   const { data, isLoading, error } = useQuery({ queryKey: qk.workspaces, queryFn: workspaceApi.list });
   const workspaces = useMemo(() => data?.results ?? [], [data]);
-  const [selectedId, setSelectedId] = useState<number | null>(null);
-
-  useEffect(() => {
-    setSelectedId(readStoredId());
-  }, []);
+  // Only rendered client-side (behind the auth gate), so reading storage here is safe.
+  const [selectedId, setSelectedId] = useState<number | null>(readStoredId);
 
   const current = useMemo(
     () => workspaces.find((w) => w.id === selectedId) ?? workspaces[0] ?? null,

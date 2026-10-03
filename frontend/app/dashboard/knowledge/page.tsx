@@ -21,17 +21,15 @@ function KnowledgeList() {
   const { current, can } = useWorkspace();
   const router = useRouter();
   const params = useSearchParams();
-  const [open, setOpen] = useState(false);
+  const canCreate = can("MEMBER");
+  const [open, setOpen] = useState(() => params.get("new") === "1" && canCreate);
   const [filter, setFilter] = useState("");
   const workspace = current!.id;
-  const canCreate = can("MEMBER");
 
+  // ?new=1 (from quick actions / command palette) opens the dialog once; drop it from the URL.
   useEffect(() => {
-    if (params.get("new") === "1" && canCreate) {
-      setOpen(true);
-      router.replace("/dashboard/knowledge");
-    }
-  }, [params, router, canCreate]);
+    if (params.get("new") === "1") router.replace("/dashboard/knowledge");
+  }, [params, router]);
 
   const { data, isPending, error, refetch } = useQuery({
     queryKey: qk.knowledgeBases(workspace),
@@ -55,7 +53,13 @@ function KnowledgeList() {
       {!!data?.results.length && (
         <div className="relative max-w-xs">
           <Search className="absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
-          <Input value={filter} onChange={(e) => setFilter(e.target.value)} placeholder="Filter knowledge bases" className="h-9 pl-8" aria-label="Filter knowledge bases" />
+          <Input
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            placeholder="Filter knowledge bases"
+            className="h-9 pl-8"
+            aria-label="Filter knowledge bases"
+          />
         </div>
       )}
 
@@ -93,7 +97,9 @@ function KnowledgeList() {
                 <span className="text-xs text-muted-foreground">{timeAgo(kb.last_activity_at)}</span>
               </div>
               <h3 className="mt-4 font-medium tracking-tight">{kb.name}</h3>
-              <p className="mt-1 line-clamp-2 min-h-10 text-sm text-muted-foreground">{kb.description || "No description"}</p>
+              <p className="mt-1 line-clamp-2 min-h-10 text-sm text-muted-foreground">
+                {kb.description || "No description"}
+              </p>
               <div className="mt-4 flex items-center gap-1.5 border-t pt-3 text-xs text-muted-foreground">
                 <FileText className="size-3.5" />
                 {kb.document_count} {kb.document_count === 1 ? "document" : "documents"}

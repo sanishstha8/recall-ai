@@ -9,7 +9,12 @@ import { toast } from "sonner";
 
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { conversationApi } from "@/lib/api/endpoints";
@@ -64,7 +69,13 @@ export function ConversationList({ onNavigate }: { onNavigate?: () => void }) {
         </Button>
         <div className="relative">
           <Search className="absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2 text-muted-foreground" />
-          <Input value={filter} onChange={(e) => setFilter(e.target.value)} placeholder="Search chats" className="h-8 pl-8 text-sm" aria-label="Search chats" />
+          <Input
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            placeholder="Search chats"
+            className="h-8 pl-8 text-sm"
+            aria-label="Search chats"
+          />
         </div>
       </div>
       <nav aria-label="Conversations" className="flex-1 overflow-y-auto px-2 pb-3">
@@ -75,7 +86,9 @@ export function ConversationList({ onNavigate }: { onNavigate?: () => void }) {
             ))}
           </div>
         ) : items.length === 0 ? (
-          <p className="px-3 py-6 text-center text-xs text-muted-foreground">{filter ? "No matching chats" : "No conversations yet"}</p>
+          <p className="px-3 py-6 text-center text-xs text-muted-foreground">
+            {filter ? "No matching chats" : "No conversations yet"}
+          </p>
         ) : (
           <ul className="space-y-0.5">
             {items.map((c) => (

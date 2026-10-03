@@ -6,7 +6,14 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -92,7 +99,13 @@ export function WorkspaceSwitcher() {
             </DialogHeader>
             <div className="my-5 space-y-1.5">
               <Label htmlFor="workspace-name">Name</Label>
-              <Input id="workspace-name" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Final year" autoFocus />
+              <Input
+                id="workspace-name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="e.g. Final year"
+                autoFocus
+              />
             </div>
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => setOpen(false)}>

@@ -27,7 +27,10 @@ function NewChat() {
   const initialKb = Number(params.get("kb")) || null;
   const [kbId, setKbId] = useState<number | null>(initialKb);
   const startChat = useStartChat();
-  const kbs = useQuery({ queryKey: qk.knowledgeBases(current?.id), queryFn: () => knowledgeApi.list({ workspace: current!.id }) });
+  const kbs = useQuery({
+    queryKey: qk.knowledgeBases(current?.id),
+    queryFn: () => knowledgeApi.list({ workspace: current!.id }),
+  });
   const noReadyDocs = kbs.data && !kbs.data.results.some((kb) => kb.ready_document_count > 0);
 
   const send = (text: string) => startChat.mutate({ knowledgeBaseId: kbId, initialQuestion: text });
@@ -44,7 +47,8 @@ function NewChat() {
           </div>
           <h1 className="font-display text-4xl tracking-tight">What do you want to recall?</h1>
           <p className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
-            <Lock className="size-3.5" /> Answers come from your documents, with page-level citations — generated locally.
+            <Lock className="size-3.5" /> Answers come from your documents, with page-level citations — generated
+            locally.
           </p>
         </div>
         {noReadyDocs && (
@@ -56,7 +60,13 @@ function NewChat() {
             .
           </div>
         )}
-        <Composer onSend={send} streaming={startChat.isPending} knowledgeBaseId={kbId} onKnowledgeBaseChange={setKbId} autoFocus />
+        <Composer
+          onSend={send}
+          streaming={startChat.isPending}
+          knowledgeBaseId={kbId}
+          onKnowledgeBaseChange={setKbId}
+          autoFocus
+        />
         <div className="grid gap-2 sm:grid-cols-2">
           {SUGGESTIONS.map((s) => (
             <button

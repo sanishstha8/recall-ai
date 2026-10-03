@@ -38,10 +38,10 @@ export function UploadDropzone({ knowledgeBaseId, disabled }: { knowledgeBaseId:
           continue;
         }
         setItems((p) => [{ key, file, state: "uploading" }, ...p]);
-        upload.mutate(file, {
-          onSuccess: () => update(key, { state: "done" }),
-          onError: (error) => update(key, { state: "error", error: error.message }),
-        });
+        upload
+          .mutateAsync(file)
+          .then(() => update(key, { state: "done" }))
+          .catch((error: Error) => update(key, { state: "error", error: error.message }));
       }
     },
     [upload],
@@ -100,7 +100,11 @@ export function UploadDropzone({ knowledgeBaseId, disabled }: { knowledgeBaseId:
               )}
               <span className="min-w-0 flex-1 truncate">{item.file.name}</span>
               <span className="text-xs text-muted-foreground">
-                {item.state === "uploading" ? "Uploading…" : item.state === "done" ? "Uploaded — processing" : item.error}
+                {item.state === "uploading"
+                  ? "Uploading…"
+                  : item.state === "done"
+                    ? "Uploaded — processing"
+                    : item.error}
               </span>
               <span className="hidden text-xs text-muted-foreground sm:inline">{formatBytes(item.file.size)}</span>
               {item.state !== "uploading" && (

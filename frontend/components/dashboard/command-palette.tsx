@@ -60,7 +60,12 @@ export function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenCh
   };
 
   return (
-    <CommandDialog open={open} onOpenChange={onOpenChange} title="Command palette" description="Jump anywhere in RecallAI">
+    <CommandDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      title="Command palette"
+      description="Jump anywhere in RecallAI"
+    >
       <CommandInput placeholder="Search knowledge, chats, documents or actions…" />
       <CommandList>
         <CommandEmpty>No results.</CommandEmpty>
@@ -116,7 +121,11 @@ export function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenCh
         {!!docs.data?.results.length && (
           <CommandGroup heading="Documents">
             {docs.data.results.map((d) => (
-              <CommandItem key={d.id} value={`doc ${d.id} ${d.name}`} onSelect={() => go(`/dashboard/documents/${d.id}`)}>
+              <CommandItem
+                key={d.id}
+                value={`doc ${d.id} ${d.name}`}
+                onSelect={() => go(`/dashboard/documents/${d.id}`)}
+              >
                 <FileText /> <span className="truncate">{d.name}</span>
               </CommandItem>
             ))}

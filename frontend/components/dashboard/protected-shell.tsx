@@ -33,7 +33,15 @@ export function useRequireAuth() {
 function WorkspaceGate({ children }: { children: ReactNode }) {
   const { isLoading, error, current } = useWorkspace();
   if (isLoading) return <FullPageSpinner />;
-  if (error) return <ErrorState className="m-8" title="Couldn't load your workspaces" error={error} onRetry={() => location.reload()} />;
+  if (error)
+    return (
+      <ErrorState
+        className="m-8"
+        title="Couldn't load your workspaces"
+        error={error}
+        onRetry={() => location.reload()}
+      />
+    );
   if (!current)
     return (
       <div className="flex min-h-[60vh] flex-col items-center justify-center gap-2 text-center">

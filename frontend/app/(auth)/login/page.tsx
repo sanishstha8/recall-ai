@@ -47,7 +47,15 @@ function LoginForm() {
   return (
     <form onSubmit={onSubmit} noValidate className="space-y-4">
       <FormError message={formError} />
-      <TextField id="email" label="Email" type="email" autoComplete="email" autoFocus error={errors.email?.message} {...register("email")} />
+      <TextField
+        id="email"
+        label="Email"
+        type="email"
+        autoComplete="email"
+        autoFocus
+        error={errors.email?.message}
+        {...register("email")}
+      />
       <TextField
         id="password"
         label="Password"

@@ -1,7 +1,16 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, FileText, GraduationCap, Loader2, MessageSquarePlus, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import {
+  ArrowLeft,
+  FileText,
+  GraduationCap,
+  Loader2,
+  MessageSquarePlus,
+  MoreHorizontal,
+  Pencil,
+  Trash2,
+} from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
@@ -15,7 +24,12 @@ import { KbIcon } from "@/components/knowledge/kb-icon";
 import { KnowledgeBaseFormDialog } from "@/components/knowledge/kb-form-dialog";
 import { SemanticSearch } from "@/components/knowledge/semantic-search";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useKnowledgeBaseDocuments } from "@/hooks/use-documents";
@@ -52,7 +66,10 @@ export default function KnowledgeBasePage() {
         <Skeleton className="h-40" />
       </div>
     );
-  if (kb.error) return <ErrorState className="m-8" title="Knowledge base unavailable" error={kb.error} onRetry={() => kb.refetch()} />;
+  if (kb.error)
+    return (
+      <ErrorState className="m-8" title="Knowledge base unavailable" error={kb.error} onRetry={() => kb.refetch()} />
+    );
 
   const documents = docs.data?.results ?? [];
   const readyCount = documents.filter((d) => d.status === "READY").length;
@@ -60,7 +77,10 @@ export default function KnowledgeBasePage() {
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 p-4 md:p-8">
-      <Link href="/dashboard/knowledge" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+      <Link
+        href="/dashboard/knowledge"
+        className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+      >
         <ArrowLeft className="size-4" /> Knowledge
       </Link>
 
@@ -121,7 +141,11 @@ export default function KnowledgeBasePage() {
           ) : docs.error ? (
             <ErrorState error={docs.error} onRetry={() => docs.refetch()} />
           ) : documents.length === 0 ? (
-            <EmptyState icon={FileText} title="No documents yet" description="Upload lecture notes, papers or books. They're processed and indexed locally." />
+            <EmptyState
+              icon={FileText}
+              title="No documents yet"
+              description="Upload lecture notes, papers or books. They're processed and indexed locally."
+            />
           ) : (
             <DocumentTable documents={documents} canEdit={canContribute} />
           )}

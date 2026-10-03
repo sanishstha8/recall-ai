@@ -48,7 +48,12 @@ function PageText({ content, quote, search, zoom }: { content: string; quote: st
       {paragraphs.map((p, i) => {
         const isQuoted = quoted.has(i);
         return (
-          <p key={i} ref={i === firstIndex ? firstQuoted : undefined} className="whitespace-pre-line" data-quoted={isQuoted || undefined}>
+          <p
+            key={i}
+            ref={i === firstIndex ? firstQuoted : undefined}
+            className="whitespace-pre-line"
+            data-quoted={isQuoted || undefined}
+          >
             {isQuoted ? (
               <mark className="citation-highlight">{p}</mark>
             ) : (
@@ -69,7 +74,17 @@ function PageText({ content, quote, search, zoom }: { content: string; quote: st
   );
 }
 
-function OriginalFile({ documentId, page, fileType, name }: { documentId: number; page: number; fileType: string; name: string }) {
+function OriginalFile({
+  documentId,
+  page,
+  fileType,
+  name,
+}: {
+  documentId: number;
+  page: number;
+  fileType: string;
+  name: string;
+}) {
   const [url, setUrl] = useState<string | null>(null);
   const [error, setError] = useState<unknown>(null);
   useEffect(() => {
@@ -100,7 +115,14 @@ function OriginalFile({ documentId, page, fileType, name }: { documentId: number
         </Button>
       </div>
     );
-  return <iframe key={page} title={name} src={`${url}#page=${page}`} className="h-[75vh] w-full rounded-xl border bg-muted" />;
+  return (
+    <iframe
+      key={page}
+      title={name}
+      src={`${url}#page=${page}`}
+      className="h-[75vh] w-full rounded-xl border bg-muted"
+    />
+  );
 }
 
 function Viewer() {
@@ -148,20 +170,24 @@ function Viewer() {
   });
 
   if (doc.isPending) return <Skeleton className="m-8 h-[60vh] rounded-xl" />;
-  if (doc.error) return <ErrorState className="m-8" title="Document unavailable" error={doc.error} onRetry={() => doc.refetch()} />;
+  if (doc.error)
+    return <ErrorState className="m-8" title="Document unavailable" error={doc.error} onRetry={() => doc.refetch()} />;
   const d = doc.data;
 
   return (
     <div className="mx-auto max-w-7xl space-y-5 p-4 md:p-8">
-      <Link href={`/dashboard/knowledge/${d.knowledge_base}`} className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+      <Link
+        href={`/dashboard/knowledge/${d.knowledge_base}`}
+        className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+      >
         <ArrowLeft className="size-4" /> {d.knowledge_base_name}
       </Link>
       <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
         <div className="min-w-0">
           <h1 className="truncate text-xl font-semibold tracking-tight">{d.name}</h1>
           <p className="text-sm text-muted-foreground">
-            {d.file_type.toUpperCase()} · {formatBytes(d.file_size)} · {d.page_count} pages · {d.word_count.toLocaleString()} words · uploaded{" "}
-            {formatDate(d.created_at)}
+            {d.file_type.toUpperCase()} · {formatBytes(d.file_size)} · {d.page_count} pages ·{" "}
+            {d.word_count.toLocaleString()} words · uploaded {formatDate(d.created_at)}
           </p>
         </div>
         <DocumentStatusBadge doc={d} />
@@ -169,9 +195,17 @@ function Viewer() {
 
       {d.status !== "READY" ? (
         <div className="flex flex-col items-center gap-2 rounded-xl border p-12 text-center">
-          {isProcessing(d) ? <Loader2 className="size-6 animate-spin text-brand" /> : <X className="size-6 text-destructive" />}
-          <p className="font-medium">{isProcessing(d) ? "This document is still being processed" : "Processing failed"}</p>
-          <p className="max-w-md text-sm text-muted-foreground">{d.processing_error || "Pages will appear here when indexing finishes."}</p>
+          {isProcessing(d) ? (
+            <Loader2 className="size-6 animate-spin text-brand" />
+          ) : (
+            <X className="size-6 text-destructive" />
+          )}
+          <p className="font-medium">
+            {isProcessing(d) ? "This document is still being processed" : "Processing failed"}
+          </p>
+          <p className="max-w-md text-sm text-muted-foreground">
+            {d.processing_error || "Pages will appear here when indexing finishes."}
+          </p>
         </div>
       ) : (
         <Tabs defaultValue="text">
@@ -181,7 +215,13 @@ function Viewer() {
               <TabsTrigger value="original">Original</TabsTrigger>
             </TabsList>
             <div className="flex items-center gap-1" aria-label="Page navigation">
-              <Button variant="outline" size="icon-sm" aria-label="Previous page" disabled={page <= 1} onClick={() => goTo(page - 1)}>
+              <Button
+                variant="outline"
+                size="icon-sm"
+                aria-label="Previous page"
+                disabled={page <= 1}
+                onClick={() => goTo(page - 1)}
+              >
                 <ChevronLeft />
               </Button>
               <form
@@ -201,14 +241,28 @@ function Viewer() {
                 />
                 <span>/ {pageCount}</span>
               </form>
-              <Button variant="outline" size="icon-sm" aria-label="Next page" disabled={page >= pageCount} onClick={() => goTo(page + 1)}>
+              <Button
+                variant="outline"
+                size="icon-sm"
+                aria-label="Next page"
+                disabled={page >= pageCount}
+                onClick={() => goTo(page + 1)}
+              >
                 <ChevronRight />
               </Button>
               <div className="ml-2 flex items-center gap-1 border-l pl-2">
-                <Button variant="ghost" size="icon-sm" aria-label="Zoom out" disabled={zoomIndex === 0} onClick={() => setZoomIndex((z) => z - 1)}>
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  aria-label="Zoom out"
+                  disabled={zoomIndex === 0}
+                  onClick={() => setZoomIndex((z) => z - 1)}
+                >
                   <Minus />
                 </Button>
-                <span className="w-10 text-center text-xs text-muted-foreground tabular-nums">{Math.round(ZOOM_STEPS[zoomIndex] * 100)}%</span>
+                <span className="w-10 text-center text-xs text-muted-foreground tabular-nums">
+                  {Math.round(ZOOM_STEPS[zoomIndex] * 100)}%
+                </span>
                 <Button
                   variant="ghost"
                   size="icon-sm"
@@ -233,7 +287,9 @@ function Viewer() {
                     </button>
                   </div>
                 )}
-                <div className="mb-6 text-center text-xs tracking-widest text-muted-foreground uppercase">Page {page}</div>
+                <div className="mb-6 text-center text-xs tracking-widest text-muted-foreground uppercase">
+                  Page {page}
+                </div>
                 {pageQuery.isPending ? (
                   <div className="mx-auto max-w-[68ch] space-y-3">
                     {Array.from({ length: 8 }, (_, i) => (
@@ -243,7 +299,12 @@ function Viewer() {
                 ) : pageQuery.error ? (
                   <ErrorState error={pageQuery.error} onRetry={() => pageQuery.refetch()} />
                 ) : (
-                  <PageText content={pageQuery.data.content} quote={quote} search={activeSearch} zoom={ZOOM_STEPS[zoomIndex]} />
+                  <PageText
+                    content={pageQuery.data.content}
+                    quote={quote}
+                    search={activeSearch}
+                    zoom={ZOOM_STEPS[zoomIndex]}
+                  />
                 )}
               </div>
 
@@ -287,9 +348,7 @@ function Viewer() {
                     ))}
                   </div>
                 )}
-                {!activeSearch && (
-                  <p className="text-xs text-muted-foreground">Use ← → to move between pages.</p>
-                )}
+                {!activeSearch && <p className="text-xs text-muted-foreground">Use ← → to move between pages.</p>}
               </aside>
             </div>
           </TabsContent>

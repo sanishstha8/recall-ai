@@ -104,10 +104,15 @@ export function Composer({
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        <span className="truncate rounded-full bg-muted px-2.5 py-1 text-xs text-muted-foreground" data-testid="composer-kb">
+        <span
+          className="truncate rounded-full bg-muted px-2.5 py-1 text-xs text-muted-foreground"
+          data-testid="composer-kb"
+        >
           {selected?.name ?? "All knowledge"}
         </span>
-        <span className="ml-auto hidden text-[0.7rem] text-muted-foreground sm:inline">Shift + Enter for a new line</span>
+        <span className="ml-auto hidden text-[0.7rem] text-muted-foreground sm:inline">
+          Shift + Enter for a new line
+        </span>
         {streaming ? (
           <Button size="icon-sm" variant="secondary" onClick={onStop} aria-label="Stop generating">
             <Square className="fill-current" />

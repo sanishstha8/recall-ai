@@ -72,7 +72,11 @@ export const Markdown = memo(function Markdown({
   // react-markdown never renders raw HTML, so model output cannot inject markup/scripts.
   return (
     <div className="prose-recall">
-      <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[[rehypeHighlight, { detect: false, ignoreMissing: true }]]} components={components}>
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        rehypePlugins={[[rehypeHighlight, { detect: false, ignoreMissing: true }]]}
+        components={components}
+      >
         {content}
       </ReactMarkdown>
     </div>

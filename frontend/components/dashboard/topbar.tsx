@@ -28,7 +28,13 @@ export function Topbar({ onOpenPalette }: { onOpenPalette: () => void }) {
 
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b bg-background/85 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/70 md:px-6">
-      <Button variant="ghost" size="icon" className="md:hidden" aria-label="Open navigation" onClick={() => setMobileOpen(true)}>
+      <Button
+        variant="ghost"
+        size="icon"
+        className="md:hidden"
+        aria-label="Open navigation"
+        onClick={() => setMobileOpen(true)}
+      >
         <Menu />
       </Button>
       <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
@@ -51,7 +57,10 @@ export function Topbar({ onOpenPalette }: { onOpenPalette: () => void }) {
         <ThemeToggle />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label="Account menu">
+            <button
+              className="rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              aria-label="Account menu"
+            >
               <Avatar className="size-8">
                 {user?.avatar && <AvatarImage src={user.avatar} alt="" />}
                 <AvatarFallback className="text-xs">{initials(user?.full_name ?? "")}</AvatarFallback>

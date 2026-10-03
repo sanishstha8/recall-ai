@@ -33,7 +33,10 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="space-y-6">
-      <Link href="/login" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+      <Link
+        href="/login"
+        className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+      >
         <ArrowLeft className="size-4" /> Back to sign in
       </Link>
       {sent ? (
@@ -53,7 +56,14 @@ export default function ForgotPasswordPage() {
           </div>
           <form onSubmit={onSubmit} noValidate className="space-y-4">
             <FormError message={formError} />
-            <TextField id="email" label="Email" type="email" autoComplete="email" error={errors.email?.message} {...register("email")} />
+            <TextField
+              id="email"
+              label="Email"
+              type="email"
+              autoComplete="email"
+              error={errors.email?.message}
+              {...register("email")}
+            />
             <Button type="submit" className="h-9 w-full" disabled={isSubmitting}>
               {isSubmitting && <Loader2 className="animate-spin" />}
               Send reset link

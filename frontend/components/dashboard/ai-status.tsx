@@ -27,8 +27,15 @@ function Row({ icon: Icon, label, check }: { icon: typeof Cpu; label: string; ch
             {check?.ok ? "Online" : "Unavailable"}
           </span>
         </div>
-        <p className="truncate text-xs text-muted-foreground" title={typeof check?.detail === "string" ? check.detail : undefined}>
-          {detail ? `${detail.chat_model} · ${detail.embedding_model}` : typeof check?.detail === "string" ? check.detail : ""}
+        <p
+          className="truncate text-xs text-muted-foreground"
+          title={typeof check?.detail === "string" ? check.detail : undefined}
+        >
+          {detail
+            ? `${detail.chat_model} · ${detail.embedding_model}`
+            : typeof check?.detail === "string"
+              ? check.detail
+              : ""}
         </p>
       </div>
     </div>

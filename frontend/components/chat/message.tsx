@@ -87,12 +87,18 @@ export function AssistantMessage({
             {sources.length ? `Reading ${sources.length} passages…` : "Searching your knowledge…"}
           </div>
         )}
-        {streaming && content && <span className="ml-0.5 inline-block h-4 w-1.5 animate-pulse rounded-sm bg-brand align-middle" />}
+        {streaming && content && (
+          <span className="ml-0.5 inline-block h-4 w-1.5 animate-pulse rounded-sm bg-brand align-middle" />
+        )}
 
         {!streaming && <SourceList sources={sources} />}
 
         {!streaming && content && (
-          <div className={cn("mt-2 flex items-center gap-1 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100")}>
+          <div
+            className={cn(
+              "mt-2 flex items-center gap-1 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100",
+            )}
+          >
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button

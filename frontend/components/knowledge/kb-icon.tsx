@@ -34,7 +34,9 @@ export const KB_ICONS: Record<string, LucideIcon> = {
 export function KbIcon({ name, className }: { name: string; className?: string }) {
   const Icon = KB_ICONS[name] ?? BookOpen;
   return (
-    <div className={cn("flex size-10 shrink-0 items-center justify-center rounded-lg bg-brand-soft text-brand", className)}>
+    <div
+      className={cn("flex size-10 shrink-0 items-center justify-center rounded-lg bg-brand-soft text-brand", className)}
+    >
       <Icon className="size-[1.15rem]" />
     </div>
   );
