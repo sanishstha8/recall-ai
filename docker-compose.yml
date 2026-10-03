@@ -1,0 +1,111 @@
+# RecallAI — full local stack.
+#   cp .env.example .env && docker compose up --build
+# Then pull the models once (see README / docker/pull-models.sh).
+
+x-backend: &backend
+  build:
+    context: ./backend
+  env_file: .env
+  environment:
+    DATABASE_URL: postgres://${POSTGRES_USER:-recallai}:${POSTGRES_PASSWORD:-recallai}@postgres:5432/${POSTGRES_DB:-recallai}
+    REDIS_URL: redis://redis:6379/0
+    OLLAMA_BASE_URL: http://ollama:11434
+    DOCUMENT_STORAGE_ROOT: /app/storage/documents
+    MEDIA_ROOT: /app/media
+  volumes:
+    - documents:/app/storage
+    - media:/app/media
+  depends_on:
+    postgres:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+  restart: unless-stopped
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-recallai}
+      POSTGRES_USER: ${POSTGRES_USER:-recallai}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-recallai}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  ollama:
+    image: ollama/ollama:latest
+    volumes:
+      - ollama_models:/root/.ollama
+    ports:
+      - "11434:11434"
+    restart: unless-stopped
+    # GPU acceleration (NVIDIA + nvidia-container-toolkit): uncomment below.
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+
+  backend:
+    <<: *backend
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-recallai}:${POSTGRES_PASSWORD:-recallai}@postgres:5432/${POSTGRES_DB:-recallai}
+      REDIS_URL: redis://redis:6379/0
+      OLLAMA_BASE_URL: http://ollama:11434
+      DOCUMENT_STORAGE_ROOT: /app/storage/documents
+      MEDIA_ROOT: /app/media
+      RUN_MIGRATIONS: "1"
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/api/v1/health/"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+
+  celery:
+    <<: *backend
+    command: ["celery", "-A", "config", "worker", "--loglevel=INFO", "--concurrency=2"]
+    depends_on:
+      backend:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+  ollama_models:
+  documents:
+  media:
