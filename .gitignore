@@ -44,3 +44,6 @@ Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 backend/storage/
+
+# Tool-generated agent pointer files
+frontend/CLAUDE.md
